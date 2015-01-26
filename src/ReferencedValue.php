@@ -11,23 +11,19 @@ class ReferencedValue
 
     public function __construct(&$owner, $token = null)
     {
-        if($token == '-' && is_array($owner) && !$this->isAssoc($owner)){
+        $this->owner = &$owner;
+        $this->token = $token;
+
+        if ($token == '-' && $this->isSingleDimensionArray($owner)) {
             $this->isNext = true;
         }
 
-        if ($token !== null && !isset($owner[$token]) && !$this->isNext) {
-            throw new Exception('Referenced value does not exist');
-        }
-
-        $this->owner = &$owner;
-        $this->token = $token;
+        $this->assertElementExists();
     }
 
     public function getValue()
     {
-        if($this->isNext){
-            throw new Exception('Referenced next value can not be retrieved');
-        }
+        $this->assertNotNext();
 
         if ($this->token === null) {
             return $this->owner;
@@ -58,9 +54,7 @@ class ReferencedValue
 
     public function unsetValue()
     {
-        if($this->isNext){
-            throw new Exception('Referenced next value can not be removed');
-        }
+        $this->assertNotNext();
 
         if ($this->token === null) {
             $this->owner = null;
@@ -73,7 +67,30 @@ class ReferencedValue
         return $this;
     }
 
-    private function isAssoc(Array $array) {
-        return (bool)count(array_filter(array_keys($array), 'is_string'));
+    private function assertNotNext()
+    {
+        if($this->isNext){
+            throw new Exception('Referenced next value can only be set');
+        }
+    }
+
+    private function assertElementExists()
+    {
+        if ($this->token === null || $this->isNext) {
+            return;
+        }
+
+        if(!isset($this->owner[$this->token])){
+            throw new Exception('Referenced value does not exist');
+        }
+    }
+
+    private function isSingleDimensionArray($array)
+    {
+        if(!is_array($array)){
+            return false;
+        }
+
+        return (bool)count(array_filter(array_keys($array), 'is_int'));
     }
 }
