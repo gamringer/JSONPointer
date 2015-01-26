@@ -21,7 +21,8 @@ class PointerTest extends \PHPUnit_Framework_TestCase
             "i\\j" => 5,
             "k\"l" => 6,
             " " => 7,
-            "m~n" => 8
+            "m~n" => 8,
+            "-" => 9
         ];
 		$pointer = new Pointer($target);
 
@@ -204,6 +205,7 @@ class PointerTest extends \PHPUnit_Framework_TestCase
             [addslashes("/k\"l")],
             [addslashes("/ ")],
             [addslashes("/m~0n")],
+            [addslashes("/-")],
 
             //  URI Fragment Paths
             [addslashes('#')],
@@ -218,6 +220,7 @@ class PointerTest extends \PHPUnit_Framework_TestCase
             [addslashes('#/k%22l')],
             [addslashes('#/%20')],
             [addslashes('#/m~0n')],
+            [addslashes('#/-')],
         ];
     }
 

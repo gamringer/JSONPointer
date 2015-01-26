@@ -3,6 +3,7 @@
 namespace gamringer\JSONPointer\Test;
 
 use \gamringer\JSONPointer\Pointer;
+use \gamringer\JSONPointer\Test\Resources\ArrayAccessible;
 
 class PointerLastElementTest extends \PHPUnit_Framework_TestCase
 {
@@ -45,5 +46,19 @@ class PointerLastElementTest extends \PHPUnit_Framework_TestCase
         $pointer = new Pointer($target);
 
         $nextElement = $pointer->remove('/-');
+    }
+
+    /**
+     * Tests that cannot unset the /- value
+     */
+    public function testCanGetLastElementTokenForNonArray()
+    {
+        $value = 'foo';
+        $target = new ArrayAccessible(['-'=>$value]);
+        $pointer = new Pointer($target);
+
+        $result = $pointer->get('/-');
+
+        $this->assertEquals($value, $result);
     }
 }

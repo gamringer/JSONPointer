@@ -91,6 +91,12 @@ class ReferencedValue
             return false;
         }
 
-        return (bool)count(array_filter(array_keys($array), 'is_int'));
+        foreach (array_keys($array) as $key) {
+            if (!is_int($key)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
