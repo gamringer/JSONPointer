@@ -15,8 +15,6 @@ class Pointer
 
     public function setTarget(&$target)
     {
-        $this->assertWalkable($target);
-
         $this->target = &$target;
     }
 

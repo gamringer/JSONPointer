@@ -31,16 +31,6 @@ class PointerTest extends \PHPUnit_Framework_TestCase
 		return $pointer;
 	}
 
-	/**
-     * @dataProvider invalidTargetProvider
-     * @depends testStoresTarget
-     * @expectedException \gamringer\JSONPointer\Exception
-     */
-    public function testFailsInvalidTarget($target, Pointer $pointer)
-    {
-        $pointer->setTarget($target);
-    }
-
     /**
      * @depends testStoresTarget
      * @dataProvider pathProvider
@@ -176,16 +166,6 @@ class PointerTest extends \PHPUnit_Framework_TestCase
 	public function testGetFromUnsetTarget()
 	{
 		(new Pointer())->get('');
-	}
-
-	public function invalidTargetProvider()
-	{
-		return [
-			[''],
-			[12],
-			[12.111],
-			[true],
-		];
 	}
 
     public function pathProvider()
