@@ -46,8 +46,15 @@ class PointerTest extends \PHPUnit_Framework_TestCase
     public function testSetPathValue(Pointer $pointer)
     {
         $value = 'bar';
-        $pointer->set('/foo', $value);
 
+        $pointer->set('/foo/1', $value);
+        $this->assertEquals($pointer->get('/foo/1'), $value);
+
+        $pointer->set('/foo', $value);
+        $this->assertEquals($pointer->get('/foo'), $value);
+
+        $value = [1, 2, 3];
+        $pointer->set('/foo', $value);
         $this->assertEquals($pointer->get('/foo'), $value);
     }
 
