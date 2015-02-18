@@ -111,7 +111,7 @@ class Pointer
         return new ReferencedValue($target, $token);
     }
 
-    private function &fetchTokenTargetFrom($target, $token)
+    private function &fetchTokenTargetFrom(&$target, $token)
     {
         switch (gettype($target)) {
             case 'array':
