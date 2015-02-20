@@ -17,12 +17,12 @@ class ReferencedValue
         if ($token == '-' && $this->isSingleDimensionArray($owner)) {
             $this->isNext = true;
         }
-
-        $this->assertElementExists();
     }
 
     public function getValue()
     {
+        $this->assertElementExists();
+
         $this->assertNotNext();
 
         if ($this->token === null) {
@@ -54,6 +54,8 @@ class ReferencedValue
 
     public function unsetValue()
     {
+        $this->assertElementExists();
+
         $this->assertNotNext();
 
         if ($this->token === null) {
