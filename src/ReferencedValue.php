@@ -52,6 +52,24 @@ class ReferencedValue
         return $this;
     }
 
+    public function insertValue($value)
+    {
+        if (!$this->isNext && $this->isSingleDimensionArray($this->owner)) {
+
+            if (!(isset($this->owner[$this->token]) || $this->token == sizeof($this->owner))) {
+                throw new Exception('Only an integer index can be inserted to an array');
+            }
+
+            $before = array_splice($this->owner, 0, $this->token);
+
+            $this->owner = array_merge($before, [$value], $this->owner);
+
+            return $this;
+        }
+
+        return $this->setValue($value);
+    }
+
     public function unsetValue()
     {
         $this->assertElementExists();

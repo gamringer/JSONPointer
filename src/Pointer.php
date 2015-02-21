@@ -47,6 +47,13 @@ class Pointer
         return $this;
     }
 
+    public function insert($path, $value)
+    {
+        $this->reference($path)->insertValue($value);
+
+        return $this;
+    }
+
     public function remove($path)
     {
         $this->reference($path)->unsetValue();
