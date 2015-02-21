@@ -54,20 +54,30 @@ class ReferencedValue
 
     public function insertValue($value)
     {
-        if (!$this->isNext && $this->isSingleDimensionArray($this->owner)) {
-
-            if (!(isset($this->owner[$this->token]) || $this->token == sizeof($this->owner))) {
-                throw new Exception('Only an integer index can be inserted to an array');
-            }
-
-            $before = array_splice($this->owner, 0, $this->token);
-
-            $this->owner = array_merge($before, [$value], $this->owner);
-
-            return $this;
+        if ($this->insertReplaces()) {
+            return $this->setValue($value);
         }
 
-        return $this->setValue($value);
+        $this->assertInsertableToken();
+
+        $before = array_splice($this->owner, 0, $this->token);
+
+        $this->owner = array_merge($before, [$value], $this->owner);
+
+        return $this;
+
+    }
+
+    private function assertInsertableToken()
+    {
+        if (!(isset($this->owner[$this->token]) || $this->token == sizeof($this->owner))) {
+            throw new Exception('Only an integer index can be inserted to an array');
+        }
+    }
+
+    private function insertReplaces()
+    {
+        return $this->isNext || !$this->isSingleDimensionArray($this->owner);
     }
 
     public function unsetValue()
