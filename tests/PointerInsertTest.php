@@ -8,7 +8,7 @@ use \gamringer\JSONPointer\Test\Resources\ArrayAccessible;
 class PointerInsertTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Tests that ...
+     * @testdox a new value can be inserted at specific location
      */
     public function testInsertNew()
     {
@@ -23,7 +23,7 @@ class PointerInsertTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests that ...
+     * @testdox a new value can be inserted as a last element + 1
      */
     public function testInsertLast()
     {
@@ -38,8 +38,7 @@ class PointerInsertTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests that ...
-     *
+     * @testdox a new value can not be inserted after the last position + 1
      * @expectedException \gamringer\JSONPointer\Exception
      */
     public function testInsertAfterLast()
@@ -53,7 +52,7 @@ class PointerInsertTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests that ...
+     * @testdox a new element can be inserted to the append(/-) position
      */
     public function testInsertForAppend()
     {
@@ -68,7 +67,7 @@ class PointerInsertTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests that ...
+     * @testdox a value can be written over via insertion
      */
     public function testInsertIntoExisting()
     {

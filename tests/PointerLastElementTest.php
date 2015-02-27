@@ -8,7 +8,7 @@ use \gamringer\JSONPointer\Test\Resources\ArrayAccessible;
 class PointerLastElementTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Tests that setting the /- value does indeed create a new element
+     * @testdox setting the /- value does indeed create a new element
      */
     public function testCanSetNew()
     {
@@ -25,7 +25,7 @@ class PointerLastElementTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests that cannot get the /- value
+     * @testdox the /- value should not be retrieveable in arrays
      * @expectedException \gamringer\JSONPointer\Exception
      */
     public function testCannotGet()
@@ -37,7 +37,7 @@ class PointerLastElementTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests that cannot unset the /- value
+     * @testdox the /- value should not be unsettable in arrays
      * @expectedException \gamringer\JSONPointer\Exception
      */
     public function testCannotUnset()
@@ -49,7 +49,7 @@ class PointerLastElementTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests that cannot unset the /- value
+     * @testdox the /- value in a non-array is retrieveable
      */
     public function testCanGetLastElementTokenForNonArray()
     {

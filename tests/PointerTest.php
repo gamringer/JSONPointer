@@ -6,12 +6,9 @@ use \gamringer\JSONPointer\Pointer;
 
 class PointerTest extends \PHPUnit_Framework_TestCase
 {
-	/**
-     * Tests that the pointer correctly stores and returns the target
-     */
-	public function testStoresTarget()
-	{
-        $target = [
+    protected function setUp()
+    {
+        $this->target = [
             "foo" => ["bar", "baz"],
             "" => 0,
             "a/b" => 1,
@@ -24,150 +21,136 @@ class PointerTest extends \PHPUnit_Framework_TestCase
             "m~n" => 8,
             "-" => 9
         ];
-		$pointer = new Pointer($target);
+        $this->pointer = new Pointer($this->target);
+    }
 
-		$this->assertEquals($pointer->getTarget(), $target);
+	/**
+     * @testdox the pointer correctly stores and returns the target
+     */
+	public function testStoresTarget()
+	{
+		$this->assertEquals($this->pointer->getTarget(), $this->target);
 
-		return $pointer;
+		return $this->pointer;
 	}
 
     /**
-     * @depends testStoresTarget
+     * @testdox a value can be retrieved
      * @dataProvider pathProvider
      */
-    public function testGetPathValue($path, Pointer $pointer)
+    public function testGetPathValue($path)
     {
-        $pointer->get($path);
+        $result = $this->pointer->get($path);
+
+        $this->assertNotNull($result);
     }
 
     /**
-     * @depends testStoresTarget
+     * @testdox a path can be set to a new value
      */
-    public function testSetPathValue(Pointer $pointer)
+    public function testSetPathValue()
     {
         $value = 'bar';
 
-        $pointer->set('/foo/1', $value);
-        $this->assertEquals($pointer->get('/foo/1'), $value);
+        $this->pointer->set('/foo/1', $value);
+        $this->assertEquals($this->pointer->get('/foo/1'), $value);
 
-        $pointer->set('/foo', $value);
-        $this->assertEquals($pointer->get('/foo'), $value);
+        $this->pointer->set('/foo', $value);
+        $this->assertEquals($this->pointer->get('/foo'), $value);
 
         $value = [1, 2, 3];
-        $pointer->set('/foo', $value);
-        $this->assertEquals($pointer->get('/foo'), $value);
+        $this->pointer->set('/foo', $value);
+        $this->assertSame($this->pointer->get('/foo'), $value);
     }
 
     /**
-     * @depends testStoresTarget
+     * @testdox a value can be removed
+     * @dataProvider unsetPathProvider
+     */
+    public function testRemovePathValue($path)
+    {
+        $this->pointer->remove($path);
+        try {
+            $result = $this->pointer->get($path);
+        } catch(\gamringer\JSONPointer\Exception $e) {
+            return;
+        }
+
+        $this->fail();
+    }
+
+    /**
+     * @testdox trying to remove a non-existant path will return an exception
      * @dataProvider unsetPathProvider
      * @expectedException \gamringer\JSONPointer\Exception
      */
-    public function testRemovePathValue($path, Pointer $pointer)
+    public function testRemoveUnsetPathValue($path)
     {
-        $pointer->remove($path);
-        $pointer->get($path);
+        $this->pointer->remove('/bar');
     }
 
     /**
-     * @depends testStoresTarget
-     * @dataProvider unsetPathProvider
-     * @expectedException \gamringer\JSONPointer\Exception
-     */
-    public function testRemoveUnsetPathValue($path, Pointer $pointer)
-    {
-        $pointer->remove('/bar');
-    }
-
-    /**
-     * Tests that root value can be unset
+     * @testdox root value can be unset
      */
     public function testUnsetRootValue()
     {
-        $target = [
-            "foo" => ["bar", "baz"],
-            "" => 0,
-            "a/b" => 1,
-            "c%d" => 2,
-            "e^f" => 3,
-            "g|h" => 4,
-            "i\\j" => 5,
-            "k\"l" => 6,
-            " " => 7,
-            "m~n" => 8
-        ];
-        $pointer = new Pointer($target);
-
-        $this->assertEquals($pointer->getTarget(), $target);
-        $pointer->remove('');
-        $this->assertEquals(null, $target);
+        $this->assertSame($this->pointer->getTarget(), $this->target);
+        $this->pointer->remove('');
+        $this->assertNull($this->target);
     }
 
     /**
-     * Tests that root value can be replaced
+     * @testdox root value can be replaced
      */
     public function testReplaceRootValue()
     {
-        $target = [
-            "foo" => ["bar", "baz"],
-            "" => 0,
-            "a/b" => 1,
-            "c%d" => 2,
-            "e^f" => 3,
-            "g|h" => 4,
-            "i\\j" => 5,
-            "k\"l" => 6,
-            " " => 7,
-            "m~n" => 8
-        ];
-
         $newTarget = 'foo';
 
-        $pointer = new Pointer($target);
 
-        $this->assertEquals($pointer->getTarget(), $target);
-        $pointer->set('', $newTarget);
-        $this->assertEquals($newTarget, $target);
+        $this->assertSame($this->pointer->getTarget(), $this->target);
+        $this->pointer->set('', $newTarget);
+        $this->assertSame($newTarget, $this->target);
     }
 
     /**
-     * @depends testStoresTarget
+     * @testdox trying to remove an invalid path will throw an exception
      * @expectedException \gamringer\JSONPointer\Exception
      */
-    public function testInvalidUnsetPathValue(Pointer $pointer)
+    public function testInvalidUnsetPathValue()
     {
-        $pointer->remove('foo');
+        $this->pointer->remove('foo');
     }
 
     /**
-     * @depends testStoresTarget
+     * @testdox trying to get a non-existant path will return an exception
      * @dataProvider invalidPathProvider
      * @expectedException \gamringer\JSONPointer\Exception
      */
-    public function testGetUnsetPathValue($path, Pointer $pointer)
+    public function testGetUnsetPathValue($path)
     {
-        $pointer->get($path);
+        $this->pointer->get($path);
     }
 
     /**
-     * @depends testStoresTarget
+     * @testdox trying to get a non-attainable path will return an exception
      * @expectedException \gamringer\JSONPointer\Exception
      */
-    public function testGetUnattainablePathValue(Pointer $pointer)
+    public function testGetUnattainablePathValue()
     {
-        $pointer->get('/foo/bar/0/1');
+        $this->pointer->get('/foo/bar/0/1');
     }
 
     /**
-     * @depends testStoresTarget
+     * @testdox trying to get an invalid path will throw an exception
      * @expectedException \gamringer\JSONPointer\Exception
      */
-    public function testGetInvalidPathValue(Pointer $pointer)
+    public function testGetInvalidPathValue()
     {
-        $pointer->get('/q~ux');
+        $this->pointer->get('/q~ux');
     }
 
     /**
+     * @testdox getting from an empty pointer will throw an exception
      * @expectedException \gamringer\JSONPointer\Exception
      */
 	public function testGetFromUnsetTarget()
@@ -214,17 +197,18 @@ class PointerTest extends \PHPUnit_Framework_TestCase
     public function invalidPathProvider()
     {
         return [
-            [addslashes("qux")],
-            [addslashes("/qux")],
-            [addslashes("/foo/0")],
+            ["qux"],
+            ["/qux"],
+            ["/q~ux"],
+            ["/foo/2"],
         ];
     }
 
 	public function unsetPathProvider()
 	{
 		return [
-			[addslashes("/foo/0")],
-            [addslashes("/foo")],
+			["/foo/0"],
+            ["/foo"],
 		];
 	}
 }

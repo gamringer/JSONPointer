@@ -8,7 +8,7 @@ use \gamringer\JSONPointer\Test\Resources\ArrayAccessible;
 class PointerArrayAccessTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Test getting value from Object as array
+     * @testdox getting value from Object as array
      */
     public function testGetPathValue()
     {
@@ -18,13 +18,13 @@ class PointerArrayAccessTest extends \PHPUnit_Framework_TestCase
         ];
         $target = new ArrayAccessible($attributes);
         $pointer = new Pointer($target);
-        
+
         $this->assertEquals($attributes['foo']->bar, $pointer->get('/foo/bar'));
         $this->assertEquals($target->qux, $pointer->get('/qux'));
     }
 
     /**
-     * Test setting value from Object as array
+     * @testdox setting value into Object as array
      */
     public function testSetPathValue()
     {
@@ -34,7 +34,7 @@ class PointerArrayAccessTest extends \PHPUnit_Framework_TestCase
         ];
         $target = new ArrayAccessible($attributes);
         $pointer = new Pointer($target);
-        
+
         $this->assertEquals($attributes['qux'], $pointer->get('/qux'));
         $pointer->set('/qux', 'corge');
         $this->assertEquals('corge', $pointer->get('/qux'));
@@ -42,7 +42,7 @@ class PointerArrayAccessTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test unsetting value from Object as array
+     * @testdox unsetting value from Object as array
      * @expectedException \gamringer\JSONPointer\Exception
      */
     public function testUnsetPathValue()
@@ -53,15 +53,15 @@ class PointerArrayAccessTest extends \PHPUnit_Framework_TestCase
         ];
         $target = new ArrayAccessible($attributes);
         $pointer = new Pointer($target);
-        
+
         $this->assertEquals($attributes['qux'], $pointer->get('/qux'));
         $pointer->remove('/qux');
         $pointer->get('/qux');
     }
 
     /**
-     * Tests getting an unset path
-     *     
+     * @testdox getting an unset path
+     *
      * @expectedException \gamringer\JSONPointer\Exception
      */
     public function testGetUnsetPathValue()
@@ -77,7 +77,7 @@ class PointerArrayAccessTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests that root value can be unset
+     * @testdox that root value can be unset
      */
     public function testUnsetRootValue()
     {
