@@ -201,6 +201,7 @@ class PointerTest extends \PHPUnit_Framework_TestCase
             ["/qux"],
             ["/q~ux"],
             ["/foo/2"],
+            ["/foo/0/2"],
         ];
     }
 
