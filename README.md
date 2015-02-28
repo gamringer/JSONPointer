@@ -1,7 +1,10 @@
 JSONPointer
-===========
+============
 
-[![Software License](https://img.shields.io/badge/license-MIT-red.svg)](LICENSE)
+[![License](https://poser.pugx.org/gamringer/php-json-pointer/license.svg)](https://packagist.org/packages/gamringer/php-json-pointer)
+[![Latest Stable Version](https://poser.pugx.org/gamringer/php-json-pointer/v/stable.svg)](https://packagist.org/packages/gamringer/php-json-pointer)
+[![Latest Unstable Version](https://poser.pugx.org/gamringer/php-json-pointer/v/unstable.svg)](https://packagist.org/packages/gamringer/php-json-pointer)
+[![Total Downloads](https://poser.pugx.org/gamringer/php-json-pointer/downloads.svg)](https://packagist.org/packages/gamringer/php-json-pointer)
 
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/9f14b6ae-8100-4c43-9084-b17f57165026/mini.png)](https://insight.sensiolabs.com/projects/9f14b6ae-8100-4c43-9084-b17f57165026)
 
@@ -30,3 +33,19 @@ echo $pointer->get("/foo"); // ["bar", "baz"]
 echo $pointer->set("/qux", "corge");
 echo $pointer->get("/qux"); // "corge"
 ```
+
+Installation
+------------
+
+    composer require gamringer/json-pointer
+
+Tests
+-----
+
+    composer install
+    phpunit
+
+License
+-------
+
+JSONPointer is licensed under the MIT license.
