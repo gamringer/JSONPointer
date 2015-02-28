@@ -70,7 +70,7 @@ class ReferencedValue
 
     private function assertInsertableToken()
     {
-        if (!(isset($this->owner[$this->token]) || $this->token == sizeof($this->owner))) {
+        if (!(array_key_exists($this->token, $this->owner) || $this->token == sizeof($this->owner))) {
             throw new Exception('Only an integer index can be inserted to an array');
         }
     }

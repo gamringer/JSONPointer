@@ -80,4 +80,19 @@ class PointerInsertTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($value, $result);
     }
+
+    /**
+     * @testdox a null value can be written over via insertion in an array
+     */
+    public function testInsertIntoExistingNull()
+    {
+        $target = [null, 1, 2];
+        $pointer = new Pointer($target);
+
+        $value = 'qux';
+
+        $result = $pointer->insert('/0', $value)->get('/0');
+
+        $this->assertEquals($value, $result);
+    }
 }
