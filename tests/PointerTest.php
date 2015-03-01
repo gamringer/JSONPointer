@@ -132,6 +132,19 @@ class PointerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @testdox Trying to retrieve null target should not return an exception
+     */
+    public function testGetNullValue()
+    {
+        $target = ['foo' => null];
+        $pointer = new Pointer($target);
+
+        $actual = $pointer->get('/foo');
+
+        $this->assertNull($actual);
+    }
+
+    /**
      * @testdox trying to get a non-attainable path will return an exception
      * @expectedException \gamringer\JSONPointer\Exception
      */

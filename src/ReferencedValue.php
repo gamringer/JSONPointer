@@ -110,7 +110,7 @@ class ReferencedValue
             return;
         }
 
-        if(!isset($this->owner[$this->token])){
+        if(!array_key_exists($this->token, $this->owner)){
             throw new Exception('Referenced value does not exist');
         }
     }
