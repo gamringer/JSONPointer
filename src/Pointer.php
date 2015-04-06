@@ -5,12 +5,14 @@ namespace gamringer\JSONPointer;
 use gamringer\JSONPointer\Access\Accesses;
 use gamringer\JSONPointer\Access\ArrayAccessor;
 use gamringer\JSONPointer\Access\ObjectAccessor;
+
 class Pointer
 {
     private $target;
 
     private $arrayAccessor;
     private $stdObjectAccessor;
+    private $objectAccessors = [];
 
     public function __construct(&$target = null)
     {
@@ -35,6 +37,11 @@ class Pointer
         }
 
         return $this->stdObjectAccessor;
+    }
+
+    public function setAccessor($type, Accesses $accessor)
+    {
+        $this->objectAccessors[$type] = $accessor;
     }
 
     public function setTarget(&$target)
@@ -124,8 +131,8 @@ class Pointer
     private function walk($path)
     {
         $target = &$this->target;
-
         $tokens = explode('/', substr($path, 1));
+        
         while (($token = array_shift($tokens)) !== null) {
 
             $accessor = $this->getAccessorFor($target);
@@ -149,17 +156,19 @@ class Pointer
                 return $this->getArrayAccessor();
 
             case 'object':
+                foreach ($this->objectAccessors as $class => $objectAccessor) {
+                    if ($target instanceof $class) {
+                        return $objectAccessor;
+                    }
+                }
                 return $this->getStdObjectAccessor();
         }
     }
 
     private function &fetchTokenTargetFrom(&$target, $token, Accesses $accessor)
     {
-        if ($accessor === null) {
-            throw new Exception('Cannot access target properties');
-        }
-
         $result = &$accessor->getValue($target, $token);
+
         return $result;
     }
 
