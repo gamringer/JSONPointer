@@ -2,15 +2,39 @@
 
 namespace gamringer\JSONPointer;
 
+use gamringer\JSONPointer\Access\Accesses;
+use gamringer\JSONPointer\Access\ArrayAccessor;
+use gamringer\JSONPointer\Access\ObjectAccessor;
 class Pointer
 {
     private $target;
+
+    private $arrayAccessor;
+    private $stdObjectAccessor;
 
     public function __construct(&$target = null)
     {
         if ($target !== null) {
             $this->setTarget($target);
         }
+    }
+
+    protected function getArrayAccessor()
+    {
+        if (!isset($this->arrayAccessor)) {
+            $this->arrayAccessor = new ArrayAccessor();
+        }
+
+        return $this->arrayAccessor;
+    }
+
+    protected function getStdObjectAccessor()
+    {
+        if (!isset($this->stdObjectAccessor)) {
+            $this->stdObjectAccessor = new ObjectAccessor();
+        }
+
+        return $this->stdObjectAccessor;
     }
 
     public function setTarget(&$target)
@@ -104,41 +128,50 @@ class Pointer
         $tokens = explode('/', substr($path, 1));
         while (($token = array_shift($tokens)) !== null) {
 
+            $accessor = $this->getAccessorFor($target);
             $token = $this->unescape($token);
 
             if (empty($tokens)) {
                 break;
             }
 
-            $target = &$this->fetchTokenTargetFrom($target, $token);
+            $this->assertWalkable($target);
+            $target = &$this->fetchTokenTargetFrom($target, $token, $accessor);
         }
 
-        $this->assertWalkable($target);
-
-        return new ReferencedValue($target, $token);
+        return new ReferencedValue($target, $token, $accessor);
     }
 
-    private function &fetchTokenTargetFrom(&$target, $token)
+    private function getAccessorFor(&$target)
     {
         switch (gettype($target)) {
             case 'array':
-                return $target[$token];
+                return $this->getArrayAccessor();
 
             case 'object':
-                return $target->{$token};
+                return $this->getStdObjectAccessor();
+        }
+    }
+
+    private function &fetchTokenTargetFrom(&$target, $token, Accesses $accessor)
+    {
+        if ($accessor === null) {
+            throw new Exception('Cannot access target properties');
         }
 
-        throw new Exception('JSONPointer can only walk through Array or ArrayAccess instances');
+        $result = &$accessor->getValue($target, $token);
+        return $result;
     }
 
     private function assertWalkable($item)
     {
-        if (!(
-            gettype($item) === 'array'
-         || $item instanceof \ArrayAccess
-        )) {
-            throw new Exception('JSONPointer can only walk through Array or ArrayAccess instances');
+        switch (gettype($item)) {
+            case 'array':
+            case 'object':
+                return;
         }
+
+        throw new Exception('JSONPointer can only walk through Array or handled Object instances');
     }
 
     private function assertTarget()

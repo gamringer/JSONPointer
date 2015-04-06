@@ -2,20 +2,33 @@
 
 namespace gamringer\JSONPointer;
 
+use gamringer\JSONPointer\Access\Accesses;
+
 class ReferencedValue
 {
     private $owner;
     private $token;
+    private $accessor;
 
     private $isNext = false;
 
-    public function __construct(&$owner, $token = null)
+    public function __construct(&$owner, $token = null, Accesses $accessor = null)
     {
         $this->owner = &$owner;
         $this->token = $token;
+        $this->accessor = $accessor;
+
+        $this->assertPropertiesAccessible();
 
         if ($token == '-' && $this->isSingleDimensionArray($owner)) {
             $this->isNext = true;
+        }
+    }
+
+    protected function assertPropertiesAccessible()
+    {
+        if ($this->accessor === null && $this->token !== null) {
+            throw new Exception('Properties are not accessible');
         }
     }
 
@@ -29,7 +42,7 @@ class ReferencedValue
             return $this->owner;
         }
 
-        return $this->owner[$this->token];
+        return $this->accessor->getValue($this->owner, $this->token);
     }
 
     public function setValue($value)
@@ -47,7 +60,7 @@ class ReferencedValue
             return $this;
         }
 
-        $this->owner[$this->token] = $value;
+        $pointedValue = $this->accessor->setValue($this->owner, $this->token, $value);
 
         return $this;
     }
@@ -92,7 +105,7 @@ class ReferencedValue
             return $this;
         }
 
-        unset($this->owner[$this->token]);
+        $pointedValue = $this->accessor->unsetValue($this->owner, $this->token);
 
         return $this;
     }
@@ -110,7 +123,7 @@ class ReferencedValue
             return;
         }
 
-        if(!array_key_exists($this->token, $this->owner)){
+        if(!$this->accessor->hasValue($this->owner, $this->token)){
             throw new Exception('Referenced value does not exist');
         }
     }

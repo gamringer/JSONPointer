@@ -125,6 +125,7 @@ class PointerTest extends \PHPUnit_Framework_TestCase
      * @testdox trying to get a non-existant path will return an exception
      * @dataProvider invalidPathProvider
      * @expectedException \gamringer\JSONPointer\Exception
+     * @group test
      */
     public function testGetUnsetPathValue($path)
     {
