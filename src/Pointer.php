@@ -39,6 +39,16 @@ class Pointer
         return $this->stdObjectAccessor;
     }
 
+    protected function getObjectAccessor($target)
+    {
+        foreach ($this->objectAccessors as $class => $objectAccessor) {
+            if ($target instanceof $class) {
+                return $objectAccessor;
+            }
+        }
+        return $this->getStdObjectAccessor();
+    }
+
     public function setAccessor($type, Accesses $accessor)
     {
         $this->objectAccessors[$type] = $accessor;
@@ -158,12 +168,7 @@ class Pointer
                 return $this->getArrayAccessor();
 
             case 'object':
-                foreach ($this->objectAccessors as $class => $objectAccessor) {
-                    if ($target instanceof $class) {
-                        return $objectAccessor;
-                    }
-                }
-                return $this->getStdObjectAccessor();
+                return $this->getObjectAccessor($target);
         }
     }
 
