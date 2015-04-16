@@ -60,7 +60,7 @@ class ReferencedValue
             return $this;
         }
 
-        $pointedValue = $this->accessor->setValue($this->owner, $this->token, $value);
+        $this->accessor->setValue($this->owner, $this->token, $value);
 
         return $this;
     }
@@ -105,7 +105,7 @@ class ReferencedValue
             return $this;
         }
 
-        $pointedValue = $this->accessor->unsetValue($this->owner, $this->token);
+        $this->accessor->unsetValue($this->owner, $this->token);
 
         return $this;
     }
