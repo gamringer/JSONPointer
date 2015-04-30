@@ -34,14 +34,13 @@ class ObjectAccessorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->pointer->get('/foo'), $value);
     }
 
-	/**
+    /**
      * @testdox Object target value is correctly unset
      */
-	public function testUnsetTargetValue()
-	{
+    public function testUnsetTargetValue()
+    {
         $this->assertObjectHasAttribute('foo', $this->target);
         $this->pointer->remove('/foo');
         $this->assertObjectNotHasAttribute('foo', $this->target);
-	}
-
+    }
 }

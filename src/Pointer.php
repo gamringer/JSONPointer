@@ -146,7 +146,6 @@ class Pointer
         $accessor = null;
         
         while (($token = array_shift($tokens)) !== null) {
-
             $accessor = $this->getAccessorFor($target);
             $token = $this->unescape($token);
 

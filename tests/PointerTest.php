@@ -24,15 +24,15 @@ class PointerTest extends \PHPUnit_Framework_TestCase
         $this->pointer = new Pointer($this->target);
     }
 
-	/**
+    /**
      * @testdox the pointer correctly stores and returns the target
      */
-	public function testStoresTarget()
-	{
-		$this->assertEquals($this->pointer->getTarget(), $this->target);
+    public function testStoresTarget()
+    {
+        $this->assertEquals($this->pointer->getTarget(), $this->target);
 
-		return $this->pointer;
-	}
+        return $this->pointer;
+    }
 
     /**
      * @testdox a value can be retrieved
@@ -71,8 +71,8 @@ class PointerTest extends \PHPUnit_Framework_TestCase
     {
         $this->pointer->remove($path);
         try {
-            $result = $this->pointer->get($path);
-        } catch(\gamringer\JSONPointer\Exception $e) {
+            $this->pointer->get($path);
+        } catch (\gamringer\JSONPointer\Exception $e) {
             return;
         }
 
@@ -81,10 +81,9 @@ class PointerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @testdox trying to remove a non-existant path will return an exception
-     * @dataProvider unsetPathProvider
      * @expectedException \gamringer\JSONPointer\Exception
      */
-    public function testRemoveUnsetPathValue($path)
+    public function testRemoveUnsetPathValue()
     {
         $this->pointer->remove('/bar');
     }
@@ -167,10 +166,10 @@ class PointerTest extends \PHPUnit_Framework_TestCase
      * @testdox getting from an empty pointer will throw an exception
      * @expectedException \gamringer\JSONPointer\Exception
      */
-	public function testGetFromUnsetTarget()
-	{
-		(new Pointer())->get('');
-	}
+    public function testGetFromUnsetTarget()
+    {
+        (new Pointer())->get('');
+    }
 
     public function pathProvider()
     {
@@ -219,11 +218,11 @@ class PointerTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-	public function unsetPathProvider()
-	{
-		return [
-			["/foo/0"],
+    public function unsetPathProvider()
+    {
+        return [
+            ["/foo/0"],
             ["/foo"],
-		];
-	}
+        ];
+    }
 }

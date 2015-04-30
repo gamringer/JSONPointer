@@ -33,7 +33,7 @@ class PointerLastElementTest extends \PHPUnit_Framework_TestCase
         $target = [];
         $pointer = new Pointer($target);
 
-        $nextElement = $pointer->get('/-');
+        $pointer->get('/-');
     }
 
     /**
@@ -45,7 +45,7 @@ class PointerLastElementTest extends \PHPUnit_Framework_TestCase
         $target = [];
         $pointer = new Pointer($target);
 
-        $nextElement = $pointer->remove('/-');
+        $pointer->remove('/-');
     }
 
     /**

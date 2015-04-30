@@ -47,8 +47,7 @@ class ReferencedValue
 
     public function setValue($value)
     {
-        if($this->isNext){
-
+        if ($this->isNext) {
             $this->owner[] = $value;
 
             return $this;
@@ -112,7 +111,7 @@ class ReferencedValue
 
     private function assertNotNext()
     {
-        if($this->isNext){
+        if ($this->isNext) {
             throw new Exception('Referenced next value can only be set');
         }
     }
@@ -123,14 +122,14 @@ class ReferencedValue
             return;
         }
 
-        if(!$this->accessor->hasValue($this->owner, $this->token)){
+        if (!$this->accessor->hasValue($this->owner, $this->token)) {
             throw new Exception('Referenced value does not exist');
         }
     }
 
     private function isSingleDimensionArray($array)
     {
-        if(!is_array($array)){
+        if (!is_array($array)) {
             return false;
         }
 
