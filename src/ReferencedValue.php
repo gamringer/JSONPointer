@@ -20,7 +20,7 @@ class ReferencedValue
 
         $this->assertPropertiesAccessible();
 
-        if ($token == '-' && $this->isSingleDimensionArray($owner)) {
+        if ($token == '-' && $this->isIndexedArray($owner)) {
             $this->isNext = true;
         }
     }
@@ -89,7 +89,7 @@ class ReferencedValue
 
     private function insertReplaces()
     {
-        return $this->isNext || !$this->isSingleDimensionArray($this->owner);
+        return $this->isNext || !$this->isIndexedArray($this->owner);
     }
 
     public function unsetValue()
@@ -127,18 +127,19 @@ class ReferencedValue
         }
     }
 
-    private function isSingleDimensionArray($array)
+    private function isIndexedArray($value)
     {
-        if (!is_array($array)) {
+        if (!is_array($value)) {
             return false;
         }
 
-        foreach (array_keys($array) as $key) {
-            if (!is_int($key)) {
-                return false;
-            }
-        }
+        $count = sizeof($value);
+        $value[] = null;
 
-        return true;
+        $result = array_key_exists($count, $value);
+
+        array_pop($value);
+
+        return  $result;
     }
 }
