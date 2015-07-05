@@ -171,6 +171,31 @@ class PointerTest extends \PHPUnit_Framework_TestCase
         (new Pointer())->get('');
     }
 
+    /**
+     * @testdox setting a new value will return the previous value
+     * @group wip
+     */
+    public function testReturnsPreviousValueOnSet()
+    {
+        $newValue = 'new value';
+        $initialValue = $this->pointer->get('/foo');
+        $previousValue = $this->pointer->set('/foo', $newValue);
+
+        $this->assertSame($initialValue, $previousValue);
+    }
+
+    /**
+     * @testdox removing a value will return the previous value
+     * @group wip
+     */
+    public function testReturnsPreviousValueOnRemove()
+    {
+        $initialValue = $this->pointer->get('/foo');
+        $previousValue = $this->pointer->remove('/foo');
+
+        $this->assertSame($initialValue, $previousValue);
+    }
+
     public function pathProvider()
     {
         return [

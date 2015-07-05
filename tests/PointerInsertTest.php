@@ -3,6 +3,7 @@
 namespace gamringer\JSONPointer\Test;
 
 use \gamringer\JSONPointer\Pointer;
+use \gamringer\JSONPointer\VoidValue;
 use \gamringer\JSONPointer\Test\Resources\ArrayAccessible;
 
 class PointerInsertTest extends \PHPUnit_Framework_TestCase
@@ -17,9 +18,11 @@ class PointerInsertTest extends \PHPUnit_Framework_TestCase
 
         $value = 'qux';
 
-        $result = $pointer->insert('/1', $value)->get('/1');
+        $previousValue = $pointer->insert('/1', $value);
+        $result = $pointer->get('/1');
 
         $this->assertEquals($value, $result);
+        $this->assertInstanceOf(VoidValue::class, $previousValue);
     }
 
     /**
@@ -32,7 +35,8 @@ class PointerInsertTest extends \PHPUnit_Framework_TestCase
 
         $value = 'qux';
 
-        $result = $pointer->insert('/3', $value)->get('/3');
+        $pointer->insert('/3', $value);
+        $result = $pointer->get('/3');
 
         $this->assertEquals($value, $result);
     }
@@ -48,7 +52,8 @@ class PointerInsertTest extends \PHPUnit_Framework_TestCase
 
         $value = 'qux';
 
-        $result = $pointer->insert('/4', $value)->get('/4');
+        $pointer->insert('/4', $value);
+        $result = $pointer->get('/4');
     }
 
     /**
@@ -61,7 +66,8 @@ class PointerInsertTest extends \PHPUnit_Framework_TestCase
 
         $value = 'qux';
 
-        $result = $pointer->insert('/-', $value)->get('/3');
+        $pointer->insert('/-', $value);
+        $result = $pointer->get('/3');
 
         $this->assertEquals($value, $result);
     }
@@ -76,7 +82,8 @@ class PointerInsertTest extends \PHPUnit_Framework_TestCase
 
         $value = 'qux';
 
-        $result = $pointer->insert('/foo', $value)->get('/foo');
+        $pointer->insert('/foo', $value);
+        $result = $pointer->get('/foo');
 
         $this->assertEquals($value, $result);
     }
@@ -91,7 +98,8 @@ class PointerInsertTest extends \PHPUnit_Framework_TestCase
 
         $value = 'qux';
 
-        $result = $pointer->insert('/0', $value)->get('/0');
+        $pointer->insert('/0', $value);
+        $result = $pointer->get('/0');
 
         $this->assertEquals($value, $result);
     }

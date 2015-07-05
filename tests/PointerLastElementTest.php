@@ -3,6 +3,7 @@
 namespace gamringer\JSONPointer\Test;
 
 use \gamringer\JSONPointer\Pointer;
+use \gamringer\JSONPointer\VoidValue;
 use \gamringer\JSONPointer\Test\Resources\ArrayAccessible;
 
 class PointerLastElementTest extends \PHPUnit_Framework_TestCase
@@ -17,9 +18,11 @@ class PointerLastElementTest extends \PHPUnit_Framework_TestCase
 
         $value = 'qux';
 
-        $result = $pointer->set('/-', $value)->get('/3');
+        $previousValue = $pointer->set('/-', $value);
+        $result = $pointer->get('/3');
 
         $this->assertEquals($value, $result);
+        $this->assertInstanceOf(VoidValue::class, $previousValue);
 
         return $pointer;
     }

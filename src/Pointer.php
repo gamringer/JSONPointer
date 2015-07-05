@@ -83,23 +83,17 @@ class Pointer
 
     public function set($path, $value)
     {
-        $this->reference($path)->setValue($value);
-
-        return $this;
+        return $this->reference($path)->setValue($value);
     }
 
     public function insert($path, $value)
     {
-        $this->reference($path)->insertValue($value);
-
-        return $this;
+        return $this->reference($path)->insertValue($value);
     }
 
     public function remove($path)
     {
-        $this->reference($path)->unsetValue();
-
-        return $this;
+        return $this->reference($path)->unsetValue();
     }
 
     private function unescape($token)

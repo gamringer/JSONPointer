@@ -50,18 +50,22 @@ class ReferencedValue
         if ($this->isNext) {
             $this->owner[] = $value;
 
-            return $this;
+            return new VoidValue();
         }
 
         if ($this->token === null) {
+            $previousValue = $this->owner;
+            
             $this->owner = $value;
 
-            return $this;
+            return $previousValue;
         }
+        
+        $previousValue = $this->accessor->getValue($this->owner, $this->token);
 
         $this->accessor->setValue($this->owner, $this->token, $value);
 
-        return $this;
+        return $previousValue;
     }
 
     public function insertValue($value)
@@ -76,7 +80,7 @@ class ReferencedValue
 
         $this->owner = array_merge($before, [$value], $this->owner);
 
-        return $this;
+        return new VoidValue();
 
     }
 
@@ -99,14 +103,18 @@ class ReferencedValue
         $this->assertNotNext();
 
         if ($this->token === null) {
+            $previousValue = $this->owner;
+
             $this->owner = null;
 
-            return $this;
+            return $previousValue;
         }
+
+        $previousValue = $this->accessor->getValue($this->owner, $this->token);
 
         $this->accessor->unsetValue($this->owner, $this->token);
 
-        return $this;
+        return $previousValue;
     }
 
     private function assertNotNext()
