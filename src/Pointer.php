@@ -10,48 +10,20 @@ class Pointer
 {
     private $target;
 
-    private $arrayAccessor;
-    private $stdObjectAccessor;
-    private $objectAccessors = [];
+    private $accessorCollection;
 
     public function __construct(&$target = null)
     {
         if ($target !== null) {
             $this->setTarget($target);
         }
+
+        $this->accessorCollection = new AccessorCollection();
     }
 
-    protected function getArrayAccessor()
+    public function getAccessorCollection()
     {
-        if (!isset($this->arrayAccessor)) {
-            $this->arrayAccessor = new ArrayAccessor();
-        }
-
-        return $this->arrayAccessor;
-    }
-
-    protected function getStdObjectAccessor()
-    {
-        if (!isset($this->stdObjectAccessor)) {
-            $this->stdObjectAccessor = new ObjectAccessor();
-        }
-
-        return $this->stdObjectAccessor;
-    }
-
-    protected function getObjectAccessor($target)
-    {
-        foreach ($this->objectAccessors as $class => $objectAccessor) {
-            if ($target instanceof $class) {
-                return $objectAccessor;
-            }
-        }
-        return $this->getStdObjectAccessor();
-    }
-
-    public function setAccessor($type, Accesses $accessor)
-    {
-        $this->objectAccessors[$type] = $accessor;
+        return $this->accessorCollection;
     }
 
     public function setTarget(&$target)
@@ -140,7 +112,7 @@ class Pointer
         $accessor = null;
         
         while (($token = array_shift($tokens)) !== null) {
-            $accessor = $this->getAccessorFor($target);
+            $accessor = $this->accessorCollection->getAccessorFor($target);
             $token = $this->unescape($token);
 
             if (empty($tokens)) {
@@ -152,17 +124,6 @@ class Pointer
         }
 
         return new ReferencedValue($target, $token, $accessor);
-    }
-
-    private function getAccessorFor(&$target)
-    {
-        switch (gettype($target)) {
-            case 'array':
-                return $this->getArrayAccessor();
-
-            case 'object':
-                return $this->getObjectAccessor($target);
-        }
     }
 
     private function &fetchTokenTargetFrom(&$target, $token, Accesses $accessor)

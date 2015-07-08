@@ -22,7 +22,7 @@ class PointerAccessorTest extends \PHPUnit_Framework_TestCase
      */
     public function testCanSetNew()
     {
-        $this->pointer->setAccessor('\stdClass', new StdClassAccessor());
+        $this->pointer->getAccessorCollection()->setAccessor('\stdClass', new StdClassAccessor());
 
         $this->assertEquals($this->pointer->get('/foo'), $this->target->foo);
 
