@@ -18,9 +18,6 @@ tools:
     php_sim: true
     php_pdepend: true
     php_analyzer: true
-    external_code_coverage:
-        timeout: 600
-        runs: 3
     php_code_coverage: false
     php_code_sniffer:
         config:
