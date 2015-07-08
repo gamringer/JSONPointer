@@ -8,9 +8,9 @@ use gamringer\JSONPointer\Access\ObjectAccessor;
 
 class AccessorCollection
 {
-    private static $arrayAccessor;
-    private static $stdObjectAccessor;
-    private $objectAccessors = [];
+    protected static $arrayAccessor;
+    protected static $stdObjectAccessor;
+    protected $objectAccessors = [];
 
     protected function getArrayAccessor()
     {
