@@ -30,11 +30,19 @@ $target = [
 $pointer = new \gamringer\JSONPointer\Pointer($target);
 
 var_dump($pointer->get("/foo")); // ["bar", "baz"]
-var_dump($pointer->set("/foo", "corge")); // ["bar", "baz"]
+var_dump($pointer->insert("/foo/1", "waldo")); // class gamringer\JSONPointer\VoidValue...
+var_dump($pointer->get("/foo")); // ["bar", "waldo", "baz"]
 
-var_dump($pointer->set("/qux", "corge")); // Object {VoidValue}
-var_dump($pointer->get("/qux")); // "corge"
-var_dump($pointer->remove("/qux")); // "corge"
+var_dump($pointer->set("/foo", "corge")); // ["bar", "waldo", "baz"]
+
+var_dump($pointer->set("/grault", "garply")); // class gamringer\JSONPointer\VoidValue...
+var_dump($pointer->get("/grault")); // "garply"
+var_dump($pointer->remove("/qux")); // "quux"
+var_dump($pointer->remove("/qux")); // Throw gamringer\JSONPointer\Exception
+
+var_dump($pointer->get("/qux")); // Throw gamringer\JSONPointer\Exception
+var_dump($pointer->insert("/qux", "quux")); // class gamringer\JSONPointer\VoidValue...
+var_dump($pointer->get("/qux")); // "quux"
 ```
 
 Installation
