@@ -173,7 +173,6 @@ class PointerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @testdox setting a new value will return the previous value
-     * @group wip
      */
     public function testReturnsPreviousValueOnSet()
     {
@@ -186,7 +185,6 @@ class PointerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @testdox removing a value will return the previous value
-     * @group wip
      */
     public function testReturnsPreviousValueOnRemove()
     {

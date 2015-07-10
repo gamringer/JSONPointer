@@ -81,7 +81,6 @@ class ReferencedValue
         $this->owner = array_merge($before, [$value], $this->owner);
 
         return new VoidValue();
-
     }
 
     private function assertInsertableToken()

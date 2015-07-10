@@ -2,11 +2,17 @@
 
 namespace gamringer\JSONPointer\Access;
 
+use gamringer\JSONPointer\VoidValue;
+
 class ArrayAccessor implements Accesses
 {
     public function &getValue(&$target, $token)
     {
-        $pointedValue = &$target[$token];
+        $pointedValue = new VoidValue();
+        
+        if ($this->hasValue($target, $token)) {
+            $pointedValue = &$target[$token];
+        }
         
         return $pointedValue;
     }

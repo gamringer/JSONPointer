@@ -1,6 +1,6 @@
 <?php
 
-namespace gamringer\JSONPointer\Test;
+namespace gamringer\JSONPointer\Access\Test;
 
 use \gamringer\JSONPointer\Pointer;
 

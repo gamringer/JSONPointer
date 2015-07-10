@@ -29,9 +29,12 @@ $target = [
 
 $pointer = new \gamringer\JSONPointer\Pointer($target);
 
-echo $pointer->get("/foo"); // ["bar", "baz"]
-echo $pointer->set("/qux", "corge");
-echo $pointer->get("/qux"); // "corge"
+var_dump($pointer->get("/foo")); // ["bar", "baz"]
+var_dump($pointer->set("/foo", "corge")); // ["bar", "baz"]
+
+var_dump($pointer->set("/qux", "corge")); // Object {VoidValue}
+var_dump($pointer->get("/qux")); // "corge"
+var_dump($pointer->remove("/qux")); // "corge"
 ```
 
 Installation
