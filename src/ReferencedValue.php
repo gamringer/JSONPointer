@@ -55,12 +55,12 @@ class ReferencedValue
 
         if ($this->token === null) {
             $previousValue = $this->owner;
-            
+
             $this->owner = $value;
 
             return $previousValue;
         }
-        
+
         $previousValue = $this->accessor->getValue($this->owner, $this->token);
 
         $this->accessor->setValue($this->owner, $this->token, $value);

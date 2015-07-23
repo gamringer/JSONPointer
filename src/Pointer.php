@@ -108,9 +108,9 @@ class Pointer
     {
         $target = &$this->target;
         $tokens = explode('/', substr($path, 1));
-        
+
         $accessor = null;
-        
+
         while (($token = array_shift($tokens)) !== null) {
             $accessor = $this->accessorCollection->getAccessorFor($target);
             $token = $this->unescape($token);
