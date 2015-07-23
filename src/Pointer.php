@@ -119,7 +119,6 @@ class Pointer
                 break;
             }
 
-            $this->assertWalkable($target);
             $target = &$this->fetchTokenTargetFrom($target, $token, $accessor);
         }
 
@@ -131,17 +130,6 @@ class Pointer
         $result = &$accessor->getValue($target, $token);
 
         return $result;
-    }
-
-    private function assertWalkable($item)
-    {
-        switch (gettype($item)) {
-            case 'array':
-            case 'object':
-                return;
-        }
-
-        throw new Exception('JSONPointer can only walk through Array or handled Object instances');
     }
 
     private function assertTarget()
