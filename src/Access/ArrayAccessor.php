@@ -39,12 +39,8 @@ class ArrayAccessor implements Accesses
         return array_key_exists($token, $target);
     }
 
-    public function isIndexedArray($value)
+    public function isIndexedArray(Array $value)
     {
-        if (!is_array($value)) {
-            return false;
-        }
-
         $count = sizeof($value);
         $value[] = null;
 
