@@ -56,6 +56,9 @@ class PointerTest extends \PHPUnit_Framework_TestCase
         $this->pointer->set('/foo/1', $value);
         $this->assertEquals($this->pointer->get('/foo/1'), $value);
 
+        $this->pointer->set('/qux/quux', $value);
+        $this->assertEquals($this->pointer->get('/qux/quux'), $value);
+
         $this->pointer->set('/foo', $value);
         $this->assertEquals($this->pointer->get('/foo'), $value);
 
