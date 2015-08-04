@@ -10,6 +10,7 @@ class PointerTest extends \PHPUnit_Framework_TestCase
     {
         $this->target = [
             "foo" => ["bar", "baz"],
+            "qux" => ["quux" => "corge"],
             "" => 0,
             "a/b" => 1,
             "c%d" => 2,
@@ -86,6 +87,14 @@ class PointerTest extends \PHPUnit_Framework_TestCase
     public function testRemoveUnsetPathValue()
     {
         $this->pointer->remove('/bar');
+    }
+
+    /**
+     * @testdox trying to remove an index in a numeric array
+     */
+    public function testRemoveArrayIndex()
+    {
+        $this->pointer->remove('/foo/0');
     }
 
     /**
@@ -234,7 +243,7 @@ class PointerTest extends \PHPUnit_Framework_TestCase
     {
         return [
             ["qux"],
-            ["/qux"],
+            ["/grault"],
             ["/q~ux"],
             ["/foo/2"],
             ["/foo/0/2"],
@@ -244,7 +253,8 @@ class PointerTest extends \PHPUnit_Framework_TestCase
     public function unsetPathProvider()
     {
         return [
-            ["/foo/0"],
+            ["/qux"],
+            ["/qux/quux"],
             ["/foo"],
         ];
     }

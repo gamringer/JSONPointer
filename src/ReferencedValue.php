@@ -3,6 +3,7 @@
 namespace gamringer\JSONPointer;
 
 use gamringer\JSONPointer\Access\Accesses;
+use gamringer\JSONPointer\Access\ArrayAccessor;
 
 class ReferencedValue
 {
@@ -20,7 +21,7 @@ class ReferencedValue
 
         $this->assertPropertiesAccessible();
 
-        if ($token == '-' && $this->isIndexedArray($owner)) {
+        if ($token == '-' && $accessor instanceof ArrayAccessor && $accessor->isIndexedArray($owner)) {
             $this->isNext = true;
         }
     }
@@ -76,9 +77,7 @@ class ReferencedValue
 
         $this->assertInsertableToken();
 
-        $before = array_splice($this->owner, 0, $this->token);
-
-        $this->owner = array_merge($before, [$value], $this->owner);
+        array_splice($this->owner, $this->token, 0, $value);
 
         return new VoidValue();
     }
@@ -92,7 +91,7 @@ class ReferencedValue
 
     private function insertReplaces()
     {
-        return $this->isNext || !$this->isIndexedArray($this->owner);
+        return $this->isNext || !$this->accessor->isIndexedArray($this->owner);
     }
 
     public function unsetValue()
@@ -132,21 +131,5 @@ class ReferencedValue
         if (!$this->accessor->hasValue($this->owner, $this->token)) {
             throw new Exception('Referenced value does not exist');
         }
-    }
-
-    private function isIndexedArray($value)
-    {
-        if (!is_array($value)) {
-            return false;
-        }
-
-        $count = sizeof($value);
-        $value[] = null;
-
-        $result = array_key_exists($count, $value);
-
-        array_pop($value);
-
-        return  $result;
     }
 }

@@ -26,11 +26,32 @@ class ArrayAccessor implements Accesses
 
     public function unsetValue(&$target, $token)
     {
-        unset($target[$token]);
+        if (!$this->isIndexedArray($target)) {
+            unset($target[$token]);
+            return;
+        }
+
+        array_splice($target, $token, 1);
     }
     
     public function hasValue(&$target, $token)
     {
         return array_key_exists($token, $target);
+    }
+
+    public function isIndexedArray($value)
+    {
+        if (!is_array($value)) {
+            return false;
+        }
+
+        $count = sizeof($value);
+        $value[] = null;
+
+        $result = array_key_exists($count, $value);
+
+        array_pop($value);
+
+        return  $result;
     }
 }
