@@ -8,7 +8,7 @@ class ArrayAccessor implements Accesses
 {
     public function &getValue(&$target, $token)
     {
-        $pointedValue = new VoidValue();
+        $pointedValue = new VoidValue($target, $token);
         
         if ($this->hasValue($target, $token)) {
             $pointedValue = &$target[$token];

@@ -51,7 +51,7 @@ class ReferencedValue
         if ($this->isNext) {
             $this->owner[] = $value;
 
-            return new VoidValue();
+            return new VoidValue($this->owner, sizeof($this->owner)-1);
         }
 
         if ($this->token === null) {
@@ -79,7 +79,7 @@ class ReferencedValue
 
         array_splice($this->owner, $this->token, 0, $value);
 
-        return new VoidValue();
+        return new VoidValue($this->owner, $this->token);
     }
 
     private function assertInsertableToken()
