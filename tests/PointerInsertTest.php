@@ -26,6 +26,44 @@ class PointerInsertTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @testdox a new value can be inserted at specific location in an empty array
+     */
+    public function testInsertNewIntoEmptyIndexed()
+    {
+        $target = [];
+        $pointer = new Pointer($target);
+
+        $value = 'qux';
+
+        $previousValue = $pointer->insert('/0', $value);
+        $result = $pointer->get('/0');
+        $this->assertEquals($value, $result);
+        $this->assertInstanceOf(VoidValue::class, $previousValue);
+
+        $previousValue = $pointer->insert('/-', $value);
+        $result = $pointer->get('/1');
+        $this->assertEquals($value, $result);
+        $this->assertInstanceOf(VoidValue::class, $previousValue);
+    }
+
+    /**
+     * @testdox a new value can be inserted at specific location in an empty array
+     */
+    public function testInsertNewIntoEmptyAssoc()
+    {
+        $target = [];
+        $pointer = new Pointer($target);
+
+        $value = 'qux';
+
+        $previousValue = $pointer->insert('/foo', $value);
+        $result = $pointer->get('/foo');
+
+        $this->assertEquals($value, $result);
+        $this->assertInstanceOf(VoidValue::class, $previousValue);
+    }
+
+    /**
      * @testdox a new value can be inserted as a last element + 1
      */
     public function testInsertLast()

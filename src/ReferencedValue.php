@@ -85,13 +85,16 @@ class ReferencedValue
     private function assertInsertableToken()
     {
         if (!(array_key_exists($this->token, $this->owner) || $this->token == sizeof($this->owner))) {
-            throw new Exception('Only an integer index can be inserted to an array');
+            throw new Exception('Index is out of range');
         }
     }
 
     private function insertReplaces()
     {
-        return $this->isNext || !$this->accessor->isIndexedArray($this->owner);
+        return $this->isNext
+            || !$this->accessor->isIndexedArray($this->owner)
+            || (is_array($this->owner) && !filter_var($this->token, FILTER_VALIDATE_INT))
+        ;
     }
 
     public function unsetValue()
