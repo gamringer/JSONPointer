@@ -93,7 +93,7 @@ class ReferencedValue
     {
         return $this->isNext
             || !$this->accessor->isIndexedArray($this->owner)
-            || (is_array($this->owner) && !filter_var($this->token, FILTER_VALIDATE_INT))
+            || (is_array($this->owner) && filter_var($this->token, FILTER_VALIDATE_INT) === false)
         ;
     }
 
