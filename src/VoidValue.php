@@ -7,7 +7,7 @@ class VoidValue
     protected $owner;
     protected $target;
 
-    public function __construct(&$owner, $target)
+    public function __construct(&$owner = null, $target = null)
     {
         $this->owner = $owner;
         $this->target = $target;

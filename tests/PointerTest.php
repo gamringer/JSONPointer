@@ -3,6 +3,7 @@
 namespace gamringer\JSONPointer\Test;
 
 use \gamringer\JSONPointer\Pointer;
+use \gamringer\JSONPointer\VoidValue;
 
 class PointerTest extends \PHPUnit_Framework_TestCase
 {
@@ -101,16 +102,6 @@ class PointerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @testdox root value can be unset
-     */
-    public function testUnsetRootValue()
-    {
-        $this->assertSame($this->pointer->getTarget(), $this->target);
-        $this->pointer->remove('');
-        $this->assertNull($this->target);
-    }
-
-    /**
      * @testdox root value can be replaced
      */
     public function testReplaceRootValue()
@@ -206,6 +197,18 @@ class PointerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($initialValue, $previousValue);
     }
 
+    /**
+     * @testdox testing actions on the root object
+     * @dataProvider rootActionProvider
+     * @group wip
+     */
+    public function testActionOnRoot($action, $arguments, $expectation)
+    {
+        $target = ['foo'=>'bar'];
+        $pointer = new Pointer($target);
+        $pointer->$action(...$arguments);
+    }
+
     public function pathProvider()
     {
         return [
@@ -259,6 +262,16 @@ class PointerTest extends \PHPUnit_Framework_TestCase
             ["/qux"],
             ["/qux/quux"],
             ["/foo"],
+        ];
+    }
+
+    public function rootActionProvider()
+    {
+        return [
+            ['remove', [''], new VoidValue()],
+            ['set', ['', 'foo'], 'foo'],
+            ['insert', ['', 'foo'], 'foo'],
+            ['get', [''], ['foo'=>'bar']],
         ];
     }
 }

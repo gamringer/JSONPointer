@@ -92,6 +92,7 @@ class ReferencedValue
     private function insertReplaces()
     {
         return $this->isNext
+            || !($this->accessor instanceof ArrayAccessor)
             || !$this->accessor->isIndexedArray($this->owner)
             || (is_array($this->owner) && filter_var($this->token, FILTER_VALIDATE_INT) === false)
         ;
@@ -106,7 +107,7 @@ class ReferencedValue
         if ($this->token === null) {
             $previousValue = $this->owner;
 
-            $this->owner = null;
+            $this->owner = new VoidValue();
 
             return $previousValue;
         }

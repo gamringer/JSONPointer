@@ -42,7 +42,7 @@ class Pointer
 
         $path = $this->getCleanPath($path);
         if (empty($path)) {
-            return new ReferencedValue($this->target);
+            return new ReferencedValue($this->target, null, $this->accessorCollection->getAccessorFor($this->target));
         }
 
         return $this->walk($path);
