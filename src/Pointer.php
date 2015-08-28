@@ -12,11 +12,13 @@ class Pointer
 
     private $accessorCollection;
 
-    public function __construct(&$target = null)
+    public function __construct(&...$targets)
     {
-        if ($target !== null) {
-            $this->setTarget($target);
+        $target = new VoidValue();
+        if (!empty($targets)) {
+            $target = &$targets[0];
         }
+        $this->setTarget($target);
 
         $this->accessorCollection = new AccessorCollection();
     }
@@ -53,12 +55,12 @@ class Pointer
         return $this->reference($path)->getValue();
     }
 
-    public function set($path, $value)
+    public function set($path, &$value)
     {
         return $this->reference($path)->setValue($value);
     }
 
-    public function insert($path, $value)
+    public function insert($path, &$value)
     {
         return $this->reference($path)->insertValue($value);
     }

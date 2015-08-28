@@ -46,10 +46,10 @@ class ReferencedValue
         return $this->accessor->getValue($this->owner, $this->token);
     }
 
-    public function setValue($value)
+    public function setValue(&$value)
     {
         if ($this->isNext) {
-            $this->owner[] = $value;
+            $this->owner[] = &$value;
 
             return new VoidValue($this->owner, sizeof($this->owner)-1);
         }
