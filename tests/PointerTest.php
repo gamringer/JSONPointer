@@ -167,10 +167,21 @@ class PointerTest extends \PHPUnit_Framework_TestCase
     /**
      * @testdox getting from an empty pointer will throw an exception
      * @expectedException \gamringer\JSONPointer\Exception
+     * @dataProvider voidRootPathAccess
      */
-    public function testGetFromUnsetTarget()
+    public function testGetFromUnsetTarget($path)
     {
-        (new Pointer())->get('');
+        (new Pointer())->get($path);
+    }
+
+    public function voidRootPathAccess()
+    {
+        return [
+            [''],
+            ['/foo'],
+            ['/foo/0'],
+            ['/foo/bar'],
+        ];
     }
 
     /**
