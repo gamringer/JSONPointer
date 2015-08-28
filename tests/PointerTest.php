@@ -108,7 +108,6 @@ class PointerTest extends \PHPUnit_Framework_TestCase
     {
         $newTarget = 'foo';
 
-
         $this->assertSame($this->pointer->getTarget(), $this->target);
         $this->pointer->set('', $newTarget);
         $this->assertSame($newTarget, $this->target);
@@ -200,7 +199,6 @@ class PointerTest extends \PHPUnit_Framework_TestCase
     /**
      * @testdox testing actions on the root object
      * @dataProvider rootActionProvider
-     * @group wip
      */
     public function testActionOnRoot($action, $arguments, $expectation)
     {
