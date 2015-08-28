@@ -91,10 +91,15 @@ class ReferencedValue
     private function insertReplaces()
     {
         return $this->isNext
-            || !($this->accessor instanceof ArrayAccessor)
-            || !$this->accessor->isIndexedArray($this->owner)
-            || (is_array($this->owner) && filter_var($this->token, FILTER_VALIDATE_INT) === false)
+            || filter_var($this->token, FILTER_VALIDATE_INT) === false
+            || !$this->isIndexedArray()
         ;
+    }
+
+    private function isIndexedArray()
+    {
+        return $this->accessor instanceof ArrayAccessor
+            && $this->accessor->isIndexedArray($this->owner);
     }
 
     public function unsetValue()
