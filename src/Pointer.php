@@ -40,12 +40,12 @@ class Pointer
 
     private function reference($path)
     {
-        $this->assertTarget();
-
         $path = $this->getCleanPath($path);
         if (empty($path)) {
             return new ReferencedValue($this->target, null, $this->accessorCollection->getAccessorFor($this->target));
         }
+
+        $this->assertTarget();
 
         return $this->walk($path);
     }
@@ -136,7 +136,7 @@ class Pointer
 
     private function assertTarget()
     {
-        if (!isset($this->target)) {
+        if ($this->target instanceof VoidValue) {
             throw new Exception('No target defined');
         }
     }

@@ -61,7 +61,6 @@ class ReferencedValue
 
             return $previousValue;
         }
-
         $previousValue = $this->accessor->getValue($this->owner, $this->token);
 
         $this->accessor->setValue($this->owner, $this->token, $value);
@@ -128,11 +127,20 @@ class ReferencedValue
 
     private function assertElementExists()
     {
+        $this->assertOwnerExists();
+
         if ($this->token === null || $this->isNext) {
             return;
         }
 
         if (!$this->accessor->hasValue($this->owner, $this->token)) {
+            throw new Exception('Referenced value does not exist');
+        }
+    }
+
+    private function assertOwnerExists()
+    {
+        if ($this->owner instanceof VoidValue) {
             throw new Exception('Referenced value does not exist');
         }
     }
