@@ -16,8 +16,66 @@ JSONPointer
 
 A RFC6901 compliant JSON Pointer PHP implementation
 
-Example
--------
+#License
+JSONPointer is licensed under the MIT license.
+
+#Installation
+
+    composer require gamringer/json-pointer
+
+##Tests
+
+    composer install
+    phpunit
+    
+#Documentation
+
+##Retrieving a value
+```php
+<?php
+
+$target = [
+	"foo" => ["bar", "baz"],
+	"qux" => "quux"
+];
+
+$pointer = new \gamringer\JSONPointer\Pointer($target);
+
+var_dump($pointer->get("/foo"));
+
+/* Results:
+
+array(2) {
+  [0] =>
+  string(3) "bar"
+  [1] =>
+  string(3) "baz"
+}
+
+*/
+```
+Retrieving a value that does not exist will throw an exception
+
+```php
+<?php
+
+$target = [
+	"qux" => "quux"
+];
+
+$pointer = new \gamringer\JSONPointer\Pointer($target);
+
+var_dump($pointer->get("/foo"));
+
+/* Results:
+
+Throws gamringer\JSONPointer\Exception
+
+*/
+```
+
+##Inserting a value
+Inserting a value will returns a VoidValue object if used on an indexed array.
 
 ```php
 <?php
@@ -29,34 +87,156 @@ $target = [
 
 $pointer = new \gamringer\JSONPointer\Pointer($target);
 
-var_dump($pointer->get("/foo")); // ["bar", "baz"]
-var_dump($pointer->insert("/foo/1", "waldo")); // class gamringer\JSONPointer\VoidValue...
-var_dump($pointer->get("/foo")); // ["bar", "waldo", "baz"]
+$value = "waldo";
+var_dump($pointer->insert("/foo/1", $value));
+var_dump($pointer->get("/foo"));
 
-var_dump($pointer->set("/foo", "corge")); // ["bar", "waldo", "baz"]
+/* Results:
 
-var_dump($pointer->set("/grault", "garply")); // class gamringer\JSONPointer\VoidValue...
-var_dump($pointer->get("/grault")); // "garply"
-var_dump($pointer->remove("/qux")); // "quux"
-var_dump($pointer->remove("/qux")); // Throw gamringer\JSONPointer\Exception
+class gamringer\JSONPointer\VoidValue#6 (2) {
+  protected $owner =>
+  array(3) {
+    ...
+  }
+  protected $target =>
+  string(1) "1"
+}
+array(3) {
+  [0] =>
+  string(3) "bar"
+  [1] =>
+  string(5) "waldo"
+  [2] =>
+  string(3) "baz"
+}
 
-var_dump($pointer->get("/qux")); // Throw gamringer\JSONPointer\Exception
-var_dump($pointer->insert("/qux", "quux")); // class gamringer\JSONPointer\VoidValue...
-var_dump($pointer->get("/qux")); // "quux"
+*/
+```
+If used on anything else, it will behave in the exact same way as get()
+
+```php
+<?php
+
+$target = [
+	"foo" => ["bar", "baz"],
+	"qux" => "quux"
+];
+
+$pointer = new \gamringer\JSONPointer\Pointer($target);
+
+$value = "waldo";
+var_dump($pointer->insert("/foo", $value));
+var_dump($pointer->get("/foo"));
+
+/* Results:
+
+array(2) {
+  [0] =>
+  string(3) "bar"
+  [1] =>
+  string(3) "baz"
+}
+string(5) "waldo"
+
+*/
 ```
 
-Installation
-------------
+##Setting a value
+Setting a value returns the content previously at that path
 
-    composer require gamringer/json-pointer
+```php
+<?php
 
-Tests
------
+$target = [
+	"foo" => ["bar", "waldo", "baz"],
+	"qux" => "quux"
+];
 
-    composer install
-    phpunit
+$pointer = new \gamringer\JSONPointer\Pointer($target);
 
-License
--------
+$value = "corge";
+var_dump($pointer->set("/foo", $value));
 
-JSONPointer is licensed under the MIT license.
+/* Results:
+
+array(2) {
+  [0] =>
+  string(3) "bar"
+  [1] =>
+  string(5) "waldo"
+  [2] =>
+  string(3) "baz"
+}
+
+*/
+```
+
+If the path was attainable, but not set, it will return a VoidValue
+
+```php
+<?php
+
+$target = [
+	"foo" => ["bar", "waldo", "baz"],
+	"qux" => "quux"
+];
+
+$pointer = new \gamringer\JSONPointer\Pointer($target);
+
+$value = "garply";
+var_dump($pointer->set("/grault", $value));
+
+/* Results:
+
+class gamringer\JSONPointer\VoidValue#6 (2) {
+  protected $owner =>
+  array(3) {
+    ...
+  }
+  protected $target =>
+  string(6) "grault"
+}
+
+*/
+```
+
+##Remove a value
+Removing a value returns the content previously at that path
+
+```php
+<?php
+
+$target = [
+	"foo" => ["bar", "waldo", "baz"],
+	"qux" => "quux"
+];
+
+$pointer = new \gamringer\JSONPointer\Pointer($target);
+
+var_dump($pointer->remove("/qux"));
+
+/* Results:
+
+string(4) "quux"
+
+*/
+```
+Removing a value that does not exist will throw an exception
+
+```php
+<?php
+
+$target = [
+	"foo" => ["bar", "waldo", "baz"],
+];
+
+$pointer = new \gamringer\JSONPointer\Pointer($target);
+
+var_dump($pointer->remove("/qux"));
+
+/* Results:
+
+Throws gamringer\JSONPointer\Exception
+
+*/
+```
