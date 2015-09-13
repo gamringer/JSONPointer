@@ -21,7 +21,7 @@ JSONPointer is licensed under the MIT license.
 
 #Installation
 
-    composer require gamringer/json-pointer
+    composer require gamringer/php-json-pointer
 
 ##Tests
 
