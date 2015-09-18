@@ -159,7 +159,7 @@ var_dump($pointer->set("/foo", $value));
 
 /* Results:
 
-array(2) {
+array(3) {
   [0] =>
   string(3) "bar"
   [1] =>
@@ -237,6 +237,65 @@ var_dump($pointer->remove("/qux"));
 /* Results:
 
 Throws gamringer\JSONPointer\Exception
+
+*/
+```
+
+##Operations affect the original object
+This affects Remove Operations
+```php
+<?php
+
+$target = [
+  "foo" => ["bar", "waldo", "baz"],
+  "qux" => "quux"
+];
+
+$pointer = new \gamringer\JSONPointer\Pointer($target);
+$pointer->remove("/qux");
+
+var_dump($target);
+
+/* Results:
+
+array(1) {
+  'foo' =>
+  array(3) {
+    [0] =>
+    string(3) "bar"
+    [1] =>
+    string(5) "waldo"
+    [2] =>
+    string(3) "baz"
+  }
+}
+
+*/
+```
+
+This also affects Add Operations
+```php
+<?php
+
+$target = [
+  "foo" => ["bar", "waldo", "baz"],
+  "qux" => "quux"
+];
+
+$value = "bar";
+$pointer = new \gamringer\JSONPointer\Pointer($target);
+$pointer->set("/foo", $value);
+
+var_dump($target);
+
+/* Results:
+
+array(2) {
+  'foo' =>
+  string(3) "bar"
+  'qux' =>
+  string(4) "quux"
+}
 
 */
 ```
