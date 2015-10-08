@@ -38,18 +38,6 @@ class Pointer
         return $this->target;
     }
 
-    private function reference($path)
-    {
-        $path = $this->getCleanPath($path);
-        if (empty($path)) {
-            return new ReferencedValue($this->target, null, $this->accessorCollection->getAccessorFor($this->target));
-        }
-
-        $this->assertTarget();
-
-        return $this->walk($path);
-    }
-
     public function get($path)
     {
         return $this->reference($path)->getValue();
@@ -68,6 +56,18 @@ class Pointer
     public function remove($path)
     {
         return $this->reference($path)->unsetValue();
+    }
+
+    private function reference($path)
+    {
+        $path = $this->getCleanPath($path);
+        if (empty($path)) {
+            return new ReferencedValue($this->target);
+        }
+
+        $this->assertTarget();
+
+        return $this->walk($path);
     }
 
     private function unescape($token)
