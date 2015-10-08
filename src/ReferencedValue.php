@@ -21,23 +21,16 @@ class ReferencedValue
 
         $this->assertPropertiesAccessible();
 
-        if ($token == '-' && $accessor instanceof ArrayAccessor && $accessor->isIndexedArray($owner)) {
-            $this->isNext = true;
-        }
-    }
+        $this->assertAccessorCovers();
 
-    protected function assertPropertiesAccessible()
-    {
-        if ($this->accessor === null && $this->token !== null) {
-            throw new Exception('Properties are not accessible');
+        if ($token == '-' && $this->isIndexedArray()) {
+            $this->isNext = true;
         }
     }
 
     public function getValue()
     {
         $this->assertElementExists();
-
-        $this->assertNotNext();
 
         if ($this->token === null) {
             return $this->owner;
@@ -81,6 +74,43 @@ class ReferencedValue
         return new VoidValue($this->owner, $this->token);
     }
 
+    public function unsetValue()
+    {
+        $this->assertElementExists();
+
+        if ($this->token === null) {
+            $previousValue = $this->owner;
+
+            $this->owner = new VoidValue();
+
+            return $previousValue;
+        }
+
+        $previousValue = $this->accessor->getValue($this->owner, $this->token);
+
+        $this->accessor->unsetValue($this->owner, $this->token);
+
+        return $previousValue;
+    }
+    
+    protected function assertAccessorCovers()
+    {
+        if ($this->accessor === null) {
+            return;
+        }
+
+        if (!$this->accessor->covers($this->owner)) {
+            throw new Exception('Provided Accessor does not handle owner');
+        }
+    }
+
+    protected function assertPropertiesAccessible()
+    {
+        if ($this->accessor === null && $this->token !== null) {
+            throw new Exception('Properties are not accessible');
+        }
+    }
+
     private function assertInsertableToken()
     {
         if (!(array_key_exists($this->token, $this->owner) || $this->token == sizeof($this->owner))) {
@@ -102,39 +132,11 @@ class ReferencedValue
             && $this->accessor->isIndexedArray($this->owner);
     }
 
-    public function unsetValue()
-    {
-        $this->assertElementExists();
-
-        $this->assertNotNext();
-
-        if ($this->token === null) {
-            $previousValue = $this->owner;
-
-            $this->owner = new VoidValue();
-
-            return $previousValue;
-        }
-
-        $previousValue = $this->accessor->getValue($this->owner, $this->token);
-
-        $this->accessor->unsetValue($this->owner, $this->token);
-
-        return $previousValue;
-    }
-
-    private function assertNotNext()
-    {
-        if ($this->isNext) {
-            throw new Exception('Referenced next value can only be set');
-        }
-    }
-
     private function assertElementExists()
     {
         $this->assertOwnerExists();
 
-        if ($this->token === null || $this->isNext) {
+        if ($this->token === null) {
             return;
         }
 

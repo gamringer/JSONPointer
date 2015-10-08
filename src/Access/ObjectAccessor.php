@@ -33,4 +33,9 @@ class ObjectAccessor implements Accesses
     {
         return property_exists($target, $token);
     }
+
+    public function covers(&$target)
+    {
+        return is_object($target);
+    }
 }

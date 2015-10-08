@@ -11,4 +11,6 @@ interface Accesses
     public function unsetValue(&$target, $token);
 
     public function hasValue(&$target, $token);
+
+    public function covers(&$target);
 }

@@ -50,4 +50,9 @@ class ArrayAccessor implements Accesses
 
         return  $result;
     }
+
+    public function covers(&$target)
+    {
+        return is_array($target);
+    }
 }
