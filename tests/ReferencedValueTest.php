@@ -170,7 +170,6 @@ class ReferencedValueTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @testdox Set next value
-     * @group wip
      */
     public function testSetNextValue()
     {

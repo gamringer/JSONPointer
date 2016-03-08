@@ -19,7 +19,6 @@ class PointerAccessorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @testdox Can set a new Accessor for Object targets and retrieve Data
-     * @group wip
      */
     public function testCanSetNew()
     {

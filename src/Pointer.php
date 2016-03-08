@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace gamringer\JSONPointer;
 
@@ -23,7 +24,7 @@ class Pointer
         $this->accessorCollection = new AccessorCollection();
     }
 
-    public function getAccessorCollection()
+    public function getAccessorCollection(): AccessorCollection
     {
         return $this->accessorCollection;
     }
@@ -38,27 +39,27 @@ class Pointer
         return $this->target;
     }
 
-    public function get($path)
+    public function get(string $path)
     {
         return $this->reference($path)->getValue();
     }
 
-    public function set($path, &$value)
+    public function set(string $path, &$value)
     {
         return $this->reference($path)->setValue($value);
     }
 
-    public function insert($path, &$value)
+    public function insert(string $path, &$value)
     {
         return $this->reference($path)->insertValue($value);
     }
 
-    public function remove($path)
+    public function remove(string $path)
     {
         return $this->reference($path)->unsetValue();
     }
 
-    private function reference($path)
+    private function reference(string $path): ReferencedValue
     {
         $path = $this->getCleanPath($path);
         if (empty($path)) {
@@ -70,7 +71,7 @@ class Pointer
         return $this->walk($path);
     }
 
-    private function unescape($token)
+    private function unescape(string $token): string
     {
         $token = (string) $token;
 
@@ -84,7 +85,7 @@ class Pointer
         return $token;
     }
 
-    private function getCleanPath($path)
+    private function getCleanPath(string $path): string
     {
         $path = (string) $path;
 
@@ -97,7 +98,7 @@ class Pointer
         return $path;
     }
 
-    private function getRepresentedPath($path)
+    private function getRepresentedPath(string $path): string
     {
         if (substr($path, 0, 1) === '#') {
             return urldecode(substr($path, 1));
@@ -106,7 +107,7 @@ class Pointer
         return stripslashes($path);
     }
 
-    private function walk($path)
+    private function walk(string $path): ReferencedValue
     {
         $target = &$this->target;
         $tokens = explode('/', substr($path, 1));
@@ -127,7 +128,7 @@ class Pointer
         return new ReferencedValue($target, $token, $accessor);
     }
 
-    private function &fetchTokenTargetFrom(&$target, $token, Accesses $accessor)
+    private function &fetchTokenTargetFrom(&$target, string $token, Accesses $accessor)
     {
         $result = &$accessor->getValue($target, $token);
 

@@ -27,6 +27,7 @@ class PointerInsertTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @testdox a new value can be inserted at specific location in an empty array
+     * @group wip
      */
     public function testInsertNewIntoEmptyIndexed()
     {

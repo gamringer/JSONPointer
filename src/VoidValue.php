@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace gamringer\JSONPointer;
 
@@ -7,7 +8,7 @@ class VoidValue
     protected $owner;
     protected $target;
 
-    public function __construct(&$owner = null, $target = null)
+    public function __construct(&$owner = null, string $target = null)
     {
         $this->owner = $owner;
         $this->target = $target;

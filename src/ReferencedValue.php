@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace gamringer\JSONPointer;
 
@@ -44,7 +45,7 @@ class ReferencedValue
         if ($this->isNext) {
             $this->owner[] = &$value;
 
-            return new VoidValue($this->owner, sizeof($this->owner)-1);
+            return new VoidValue($this->owner, (string)(sizeof($this->owner)-1));
         }
 
         if ($this->token === null) {
@@ -69,7 +70,7 @@ class ReferencedValue
 
         $this->assertInsertableToken();
 
-        array_splice($this->owner, $this->token, 0, $value);
+        array_splice($this->owner, (int)$this->token, 0, $value);
 
         return new VoidValue($this->owner, $this->token);
     }
@@ -118,7 +119,7 @@ class ReferencedValue
         }
     }
 
-    private function insertReplaces()
+    private function insertReplaces(): bool
     {
         return $this->isNext
             || filter_var($this->token, FILTER_VALIDATE_INT) === false
@@ -126,7 +127,7 @@ class ReferencedValue
         ;
     }
 
-    private function isIndexedArray()
+    private function isIndexedArray(): bool
     {
         return $this->accessor instanceof ArrayAccessor
             && $this->accessor->isIndexedArray($this->owner);
