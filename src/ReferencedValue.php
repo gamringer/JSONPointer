@@ -29,6 +29,11 @@ class ReferencedValue
         }
     }
 
+    public function hasValue()
+    {
+        $this->assertElementExists();
+    }
+
     public function getValue()
     {
         $this->assertElementExists();

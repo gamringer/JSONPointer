@@ -37,6 +37,17 @@ class PointerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @testdox a value can be tested for existance
+     * @dataProvider pathProvider
+     */
+    public function testHasPathValue($path)
+    {
+        $result = $this->pointer->has($path);
+
+        $this->assertTrue($result);
+    }
+
+    /**
      * @testdox a value can be retrieved
      * @dataProvider pathProvider
      */
@@ -120,6 +131,17 @@ class PointerTest extends \PHPUnit_Framework_TestCase
     public function testInvalidUnsetPathValue()
     {
         $this->pointer->remove('foo');
+    }
+
+    /**
+     * @testdox testing for a non-existant path will return false
+     * @dataProvider invalidPathProvider
+     */
+    public function testHasUnsetPathValue($path)
+    {
+        $result = $this->pointer->has($path);
+
+        $this->assertFalse($result);
     }
 
     /**

@@ -6,6 +6,7 @@ namespace gamringer\JSONPointer;
 use gamringer\JSONPointer\Access\Accesses;
 use gamringer\JSONPointer\Access\ArrayAccessor;
 use gamringer\JSONPointer\Access\ObjectAccessor;
+use gamringer\JSONPointer\Exception;
 
 class Pointer
 {
@@ -37,6 +38,17 @@ class Pointer
     public function getTarget()
     {
         return $this->target;
+    }
+
+    public function has(string $path)
+    {
+        try {
+            $this->reference($path)->hasValue();
+        } catch (Exception $e) {
+            return false;
+        }
+
+        return true;
     }
 
     public function get(string $path)
