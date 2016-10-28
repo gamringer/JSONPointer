@@ -30,6 +30,45 @@ JSONPointer is licensed under the MIT license.
     
 #Documentation
 
+##Testing a value for existence
+```php
+<?php
+
+$target = [
+  "foo" => ["bar", "baz"],
+  "qux" => "quux"
+];
+
+$pointer = new \gamringer\JSONPointer\Pointer($target);
+
+var_dump($pointer->has("/foo"));
+
+/* Results:
+
+bool(true)
+
+*/
+```
+Retrieving a value that does not exist will return false
+
+```php
+<?php
+
+$target = [
+  "qux" => "quux"
+];
+
+$pointer = new \gamringer\JSONPointer\Pointer($target);
+
+var_dump($pointer->has("/foo"));
+
+/* Results:
+
+bool(false)
+
+*/
+```
+
 ##Retrieving a value
 ```php
 <?php
